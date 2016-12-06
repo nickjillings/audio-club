@@ -4,6 +4,7 @@
 #include <functional>
 #include "../JuceLibraryCode/JuceHeader.h"
 
+// A parameter class which calls a callback whenever it's value is changed.
 class ParameterWithCallback : public AudioProcessorParameterWithID
 {
 public:
@@ -19,9 +20,17 @@ public:
     
 private:
     float value, defaultValue;
-    NormalisableRange <float> range;    
-    std::function <void (float)> callback;
+
+    // this range variable makes it easy to convert between
+    // values in the range 0 to 1 (as the host wants) and the
+    // range our plug-in wants
+    NormalisableRange <float> range;
+
+    // some c++ magic for holding a function in a variable
+    // our callback variable can be used as though it were a function
+    std::function <void (float)> callback; 
     
+    // AudioProcessorParameter interface
     float getValue() const override;
     void setValue (float newValue) override;
     float getDefaultValue() const override;

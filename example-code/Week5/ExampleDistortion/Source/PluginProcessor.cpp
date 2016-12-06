@@ -13,15 +13,23 @@
 
 //==============================================================================
 ExampleDistortionAudioProcessor::ExampleDistortionAudioProcessor()
-    : fs (0),
+    : fs (0), // zero initialise all the members
       driveParam (nullptr),
       gainParam (nullptr),
       toneParam (nullptr)
 {
+    // create the parameters and add them to the plug-in
     addParameter (driveParam = new GainParameter ("drive", "Drive", 
                                                   -20.0f, 20.0f, 0.0f));
     addParameter (gainParam = new GainParameter ("gain", "Make Up Gain", 
                                                  -20.0f, 20.0f, 0.0f));
+
+    // here we create a lambda (anonymous function) which calls the 
+    // plug-in's setFilterFrequencyFunction()
+    // This is passed to out toneParam parameter as the callback it 
+    // should call when its value is changed.
+    // This way when the tone parameter is changed it will
+    // ask the plug-in to recalculate its filter coefficients
     auto callback = [this] (float frequency) 
                     {setFilterFrequency (frequency);};
     addParameter (toneParam = new ParameterWithCallback ("tone", "Tone",
@@ -90,8 +98,14 @@ void ExampleDistortionAudioProcessor::changeProgramName (int index, const String
 //==============================================================================
 void ExampleDistortionAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    // save the sample rate so we can use it when we need to calculate filter coefficients
     fs = sampleRate;
+
+    // if the sample rate has changed we need to recalculate the filter coefficients
     setFilterFrequency (*toneParam);
+
+    // reset the filter's internal buffers as the playhead may have been moved from 
+    // the position it was in when audio was last stopped
     lpf.reset();
 }
 
@@ -101,12 +115,15 @@ void ExampleDistortionAudioProcessor::releaseResources()
 
 void ExampleDistortionAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
+    // apply the drive gain
     buffer.applyGain (driveParam->getGainValue());
     
+    // get an array of the channel data
     float *channelData = buffer.getWritePointer (0);
     int numSamples = buffer.getNumSamples();
     float threshold = 0.5;
     
+    // loop through the data and apply clipping
     for (int i = 0; i < numSamples; ++i)
     {
         if (channelData [i] > threshold)
@@ -115,19 +132,23 @@ void ExampleDistortionAudioProcessor::processBlock (AudioSampleBuffer& buffer, M
             channelData [i] = -threshold;
     }
     
+    // apply the make up gain
     buffer.applyGain (gainParam->getGainValue());
     
+    // apply the tone filter
     lpf.processSamples (channelData, numSamples);
 }
 
 //==============================================================================
 bool ExampleDistortionAudioProcessor::hasEditor() const
 {
-    return false; // (change this to false if you choose to not supply an editor)
+    return false; // we have no editor
 }
 
 AudioProcessorEditor* ExampleDistortionAudioProcessor::createEditor()
 {
+    // even though we have made hasEditor() return false some
+    // hosts will still call this, so we just hand them back nothing
     return nullptr;
 }
 

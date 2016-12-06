@@ -3,6 +3,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+// A parameter class to represent dB gain values.
 class GainParameter : public AudioParameterFloat
 {
 public:

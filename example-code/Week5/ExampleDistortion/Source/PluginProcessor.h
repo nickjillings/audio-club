@@ -12,6 +12,8 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+
+// we need to include the headers of the parameter types we made
 #include "GainParameter.h"
 #include "ParameterWithCallback.h"
 
@@ -54,11 +56,12 @@ public:
 
 private:
     //==============================================================================
-    double fs;
-    GainParameter *driveParam, *gainParam;
-    IIRFilter lpf;
-    ParameterWithCallback *toneParam;
+    double fs; // we will store the sample rate here for calculating filter coefficients
+    GainParameter *driveParam, *gainParam; // two gain parameters
+    IIRFilter lpf; // an IIR filter for the tone control
+    ParameterWithCallback *toneParam; // a parameter for the tone control
     
+    // a function to calculate the filter coefficients for a given cut of frequency
     void setFilterFrequency (float frequency);
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ExampleDistortionAudioProcessor)
