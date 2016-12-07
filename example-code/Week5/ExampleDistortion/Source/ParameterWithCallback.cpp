@@ -50,6 +50,8 @@ float ParameterWithCallback::getValue() const
 void ParameterWithCallback::setValue (float newValue)
 {
     value = range.convertFrom0to1 (newValue);
+    
+    // call the callback to inform the plug-in of the parameter change
     callback (value);
 }
 
