@@ -12,8 +12,9 @@ public:
                    float defaultValue);
     ~GainParameter();
     
-    String getLabel() const override;
-    
+    // some functions specific to our gain value
+    // (it's in dB) see cpp file for more
+    String getLabel() const override;    
     float getGainValue();
 };
 

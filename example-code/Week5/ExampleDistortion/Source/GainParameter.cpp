@@ -14,7 +14,7 @@ GainParameter::~GainParameter()
 {
 }
     
-// Return a label that hosts should put after this parameter value.
+// Return a label that hosts should print after this parameter's value.
 // Useful for things like units.
 String GainParameter::getLabel() const
 {

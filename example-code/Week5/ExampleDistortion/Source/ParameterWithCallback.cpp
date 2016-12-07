@@ -71,6 +71,9 @@ int ParameterWithCallback::getNumSteps() const
 String ParameterWithCallback::getText (float value, int length) const
 {
     String asText (range.convertFrom0to1 (value), 2);
+    
+    // this is some tasty shorthad (syntactic sugar) for a small if else statement
+    // test ? ifTrue : ifFalse;
     return length > 0 ? asText.substring (0, length) : asText;
 }
 

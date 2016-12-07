@@ -26,7 +26,7 @@ ExampleDistortionAudioProcessor::ExampleDistortionAudioProcessor()
 
     // here we create a lambda (anonymous function) which calls the 
     // plug-in's setFilterFrequencyFunction()
-    // This is passed to out toneParam parameter as the callback it 
+    // This is passed to our toneParam parameter as the callback it 
     // should call when its value is changed.
     // This way when the tone parameter is changed it will
     // ask the plug-in to recalculate its filter coefficients
