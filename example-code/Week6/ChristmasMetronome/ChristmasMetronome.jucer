@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="kTqmeQ" name="ChristmasMetronome" projectType="audioplug"
+              version="1.0.0" bundleIdentifier="com.yourcompany.ChristmasMetronome"
+              includeBinaryInAppConfig="1" buildVST="1" buildVST3="0" buildAU="1"
+              buildAUv3="0" buildRTAS="0" buildAAX="0" pluginName="ChristmasMetronome"
+              pluginDesc="ChristmasMetronome" pluginManufacturer="Flying Pigeon"
+              pluginManufacturerCode="FlPg" pluginCode="ChMe" pluginChannelConfigs=""
+              pluginIsSynth="1" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
+              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="ChristmasMetronomeAU"
+              pluginRTASCategory="" aaxIdentifier="com.yourcompany.ChristmasMetronome"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.0"
+              companyName="Flying Pigeon" pluginAUMainType="">
+  <MAINGROUP id="JazfZA" name="ChristmasMetronome">
+    <GROUP id="{93FDFE92-BC6C-3440-AF46-E9AE5138AF7B}" name="Source">
+      <FILE id="joJOr2" name="ParameterSlider.cpp" compile="1" resource="0"
+            file="Source/ParameterSlider.cpp"/>
+      <FILE id="VNGcjV" name="ParameterSlider.h" compile="0" resource="0"
+            file="Source/ParameterSlider.h"/>
+      <FILE id="v0y0Ag" name="LookAndFeel.cpp" compile="1" resource="0" file="Source/LookAndFeel.cpp"/>
+      <FILE id="dC6Dxt" name="LookAndFeel.h" compile="0" resource="0" file="Source/LookAndFeel.h"/>
+      <FILE id="ax1i2X" name="Synthesiser.cpp" compile="1" resource="0" file="Source/Synthesiser.cpp"/>
+      <FILE id="dMbu2u" name="Synthesiser.h" compile="0" resource="0" file="Source/Synthesiser.h"/>
+      <FILE id="SzvRra" name="ParameterWithCallback.cpp" compile="1" resource="0"
+            file="Source/ParameterWithCallback.cpp"/>
+      <FILE id="gjlnio" name="ParameterWithCallback.h" compile="0" resource="0"
+            file="Source/ParameterWithCallback.h"/>
+      <FILE id="LmqTqA" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="LHiSJ1" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="Tvlbmj" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="ic8qA9" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+    <GROUP id="{C02118E6-CAB8-9118-B21F-D2FA9A5463A9}" name="BinaryData">
+      <FILE id="aI2kQg" name="AmplitudeDial.svg" compile="0" resource="1"
+            file="Source/BinaryData/AmplitudeDial.svg"/>
+      <FILE id="LUQGrq" name="BellsBackground.svg" compile="0" resource="1"
+            file="Source/BinaryData/BellsBackground.svg"/>
+      <FILE id="rwWfnC" name="HPFDial.svg" compile="0" resource="1" file="Source/BinaryData/HPFDial.svg"/>
+      <FILE id="bCh7e4" name="LPFDial.svg" compile="0" resource="1" file="Source/BinaryData/LPFDial.svg"/>
+      <FILE id="NmNWQC" name="sleighbell.wav" compile="0" resource="1" file="Source/BinaryData/sleighbell.wav"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile" extraCompilerFlags="-Wall">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="ChristmasMetronome"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="ChristmasMetronome"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_events" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../GitClones/juce/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../GitClones/juce/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="ChristmasMetronome"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="ChristmasMetronome"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2015 targetFolder="Builds/VisualStudio2015">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="ChristmasMetronome"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="ChristmasMetronome"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_graphics" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_events" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_data_structures" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_core" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="D:\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="D:\JUCE\modules"/>
+      </MODULEPATHS>
+    </VS2015>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+</JUCERPROJECT>
