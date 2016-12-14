@@ -19,6 +19,13 @@ GainPluginAudioProcessorEditor::GainPluginAudioProcessorEditor (GainPluginAudioP
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
+    
+    addAndMakeVisible (gainSlider);
+    gainSlider.setBounds (10, 10, 200, 20);
+    gainSlider.setRange (-20.0, 20.0, 0.0);
+    gainSlider.addListener (this);
+    
+    startTimerHz (25);
 }
 
 GainPluginAudioProcessorEditor::~GainPluginAudioProcessorEditor()
@@ -29,14 +36,15 @@ GainPluginAudioProcessorEditor::~GainPluginAudioProcessorEditor()
 void GainPluginAudioProcessorEditor::paint (Graphics& g)
 {
     g.fillAll (Colours::white);
-
-    g.setColour (Colours::black);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
 }
 
-void GainPluginAudioProcessorEditor::resized()
+void GainPluginAudioProcessorEditor::timerCallback()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    gainSlider.setValue ((float) *processor.gainParameter, dontSendNotification);
+}
+
+void GainPluginAudioProcessorEditor::sliderValueChanged (Slider *slider)
+{
+    if (slider == &gainSlider)
+        *processor.gainParameter = (float) gainSlider.getValue();
 }
