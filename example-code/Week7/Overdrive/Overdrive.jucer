@@ -8,7 +8,7 @@
               pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="OverdriveAU"
               pluginRTASCategory="" aaxIdentifier="com.yourcompany.Overdrive"
-              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.4"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.1"
               companyName="RyanStables" companyWebsite="semanticaudio.co.uk"
               companyEmail="info@semanticaduio.co.uk">
   <MAINGROUP id="nM4MRI" name="Overdrive">

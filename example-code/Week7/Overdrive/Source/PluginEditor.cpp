@@ -23,7 +23,7 @@ OverdriveAudioProcessorEditor::OverdriveAudioProcessorEditor (OverdriveAudioProc
     addAndMakeVisible(outputGainSlider);
     outputGainSlider.setRange(0.0, 3.0);
     outputGainSlider.setValue(1.0);
-    outnputGainSlider.setBounds (20, 100, 250, 20);
+	outputGainSlider.setBounds (20, 100, 250, 20);
     outputGainSlider.addListener(this);
     
     setSize (300, 260);
