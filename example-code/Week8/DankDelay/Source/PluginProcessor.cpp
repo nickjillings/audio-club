@@ -151,12 +151,14 @@ void DankDelayAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffe
         readTap = readTapStart;
         
         for (int i = 0; i < buffer.getNumSamples(); ++i)
-        {
-            delayData [writeTap] = channelData [i];
+        { 
+            channelData [i] += delayData [readTap];
+            delayData [writeTap] = Decibels::decibelsToGain <float> (*delayGain)
+                                   * (delayData [writeTap] + channelData [i]);  
+            
             ++writeTap;
             writeTap %= delayTimeSamples + 1;
             
-            channelData [i] += Decibels::decibelsToGain <float> (*delayGain) * delayData [readTap];
             ++readTap;
             readTap %= delayTimeSamples + 1;
         }
