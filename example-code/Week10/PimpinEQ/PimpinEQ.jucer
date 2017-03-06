@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="vqcXn2" name="PimpinEQ" projectType="audioplug" version="1.0.0"
+              bundleIdentifier="com.yourcompany.PimpinEQ" includeBinaryInAppConfig="1"
+              buildVST="1" buildVST3="0" buildAU="1" buildAUv3="0" buildRTAS="0"
+              buildAAX="0" pluginName="PimpinEQ" pluginDesc="PimpinEQ" pluginManufacturer="yourcompany"
+              pluginManufacturerCode="Manu" pluginCode="Vqcx" pluginChannelConfigs=""
+              pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
+              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="PimpinEQAU"
+              pluginRTASCategory="" aaxIdentifier="com.yourcompany.PimpinEQ"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.1">
+  <MAINGROUP id="WKFfX2" name="PimpinEQ">
+    <GROUP id="{C005C203-F9E8-8F25-023E-EF93FB86E0C9}" name="Source">
+      <FILE id="hrCgX1" name="ParameterWithCallback.cpp" compile="1" resource="0"
+            file="../../Useful_Bits/ParameterWithCallback.cpp"/>
+      <FILE id="gHkFdI" name="ParameterWithCallback.h" compile="0" resource="0"
+            file="../../Useful_Bits/ParameterWithCallback.h"/>
+      <FILE id="zLzjxk" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="kQDoy4" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="X36e0r" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="gf95zu" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <VS2015 targetFolder="Builds/VisualStudio2015">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="PimpinEQ"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="PimpinEQ"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="D:/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="D:/JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2015>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+</JUCERPROJECT>
