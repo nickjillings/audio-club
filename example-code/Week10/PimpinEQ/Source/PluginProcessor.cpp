@@ -27,6 +27,7 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
       fs (44100.0),
       pluginState (*this, nullptr)
 {
+    // Define the ranges of all the parameters.
     const float minFreqs [numBands] = {20.0f, 200.0f, 500.0f};
     const float defaultFreqs [numBands] = {100.0f, 500.0f, 2000.0f};
     const float maxFreqs [numBands] = {500.0f, 2000.0f, 20000.0f};
@@ -40,18 +41,21 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
     const float gainSkew = 1.0f;
     NormalisableRange <float> gainRange (minGain, maxGain, 0.0f, gainSkew);
     
+    // Loop through bands to create the parameters
     for (int band = 0; band < numBands; ++band)
     {
+        // Make some strings to use in parameter names and IDs
         String bandName = "Band " + String (band + 1);
         String bandID = "band" + String (band);
         
+        // Add the frequency parameter
         NormalisableRange <float> frequencyBandRange (minFreqs [band],
                                                       maxFreqs [band],
                                                       0.0f,
                                                       frequencySkew);
         String frequencyBandName = bandName + " Frequency";
         String frequencyBandID = bandID + "frequency";
-        frequencyParamIDs [band] = frequencyBandID;
+        frequencyParamIDs [band] = frequencyBandID; // store the ID
         pluginState.createAndAddParameter (frequencyBandID,
                                            frequencyBandName,
                                            "",
@@ -59,11 +63,13 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
                                            defaultFreqs [band],
                                            nullptr,
                                            nullptr);
+        // listen for updates to the parameter
         pluginState.addParameterListener (frequencyBandID, this);
         
+        // Add the Q parameter
         String qBandName = bandName + " Q Factor";
         String qBandID = bandID + "q";
-        qParamIDs [band] = qBandID;
+        qParamIDs [band] = qBandID; // store the ID
         pluginState.createAndAddParameter (qBandID,
                                            qBandName,
                                            "",
@@ -71,11 +77,13 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
                                            defaultQ,
                                            nullptr,
                                            nullptr);
+        // listen for updates to the parameter
         pluginState.addParameterListener (qBandID, this);
                                                  
+        // Add the gain parameter
         String gainBandName = bandName + " Gain";
         String gainBandID = bandID + "gain";
-        gainParamIDs [band] = gainBandID;
+        gainParamIDs [band] = gainBandID; // store the ID
         pluginState.createAndAddParameter (gainBandID,
                                            gainBandName,
                                            "",
@@ -83,6 +91,7 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
                                            defaultGain,
                                            nullptr,
                                            nullptr);
+        // listen for updates to the parameter
         pluginState.addParameterListener (gainBandID, this);
     }   
 }
@@ -147,19 +156,24 @@ void PimpinEqAudioProcessor::changeProgramName (int index, const String& newName
 //==============================================================================
 void PimpinEqAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    // store the sample rate
     fs = sampleRate;
     
     int numChannels = getTotalNumInputChannels();
     
+    // loop through bands to add filters
     for (int band = 0; band < numBands; ++band)
     {
+        // clear any filters we aren't using anymore
         filters [band].clear();
         
+        // add a filter for each channel of audio
         for (int channel = 0; channel < numChannels; ++channel)
         {
             filters [band].add (new IIRFilter);
         }
         
+        // initialise this band's filter coefficients
         updateFilterCoefficients (band);
     }
 }
@@ -198,10 +212,12 @@ void PimpinEqAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer
     const int totalNumOutputChannels = getTotalNumOutputChannels();
     const int numSamples = buffer.getNumSamples();
     
+    // Loop through and apply the filters
     for (int channel = 0; channel < totalNumInputChannels; ++ channel)
     {
         float *channelData = buffer.getWritePointer (channel);
         
+        // Magical range based for loops
         for (auto &band : filters)
         {
             band [channel]->processSamples (channelData, numSamples);
@@ -243,23 +259,27 @@ void PimpinEqAudioProcessor::parameterChanged (const String &parameterID, float 
     int band = 0;
     std::stringstream ss;
     
+    // Some stringstream mischief to get the band number out of the paramerID
     ss << parameterID.substring (4);
     ss >> band;
     
+    // update the coefficients for the band
     updateFilterCoefficients (band);
-    
 }
 
 void PimpinEqAudioProcessor::updateFilterCoefficients (int band)
 {
+    // Get the parameter values
     const float *freq = pluginState.getRawParameterValue (frequencyParamIDs [band]);
     const float *q = pluginState.getRawParameterValue (qParamIDs [band]);
     const float *gain = pluginState.getRawParameterValue (gainParamIDs [band]);
 
+    // calculate the coefficients
     IIRCoefficients coeffs = 
         IIRCoefficients::makePeakFilter (fs, *freq, *q,
                                          Decibels::decibelsToGain (*gain));
 
+    // give them to the filters
     for (auto filter : filters [band])
     {
         filter->setCoefficients (coeffs);

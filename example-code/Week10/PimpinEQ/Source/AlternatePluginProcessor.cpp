@@ -25,6 +25,7 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
 #endif
       fs (44100.0)
 {
+    // Define the ranges of all the parameters.
     const float minFreqs [numBands] = {20.0f, 200.0f, 500.0f};
     const float defaultFreqs [numBands] = {100.0f, 500.0f, 2000.0f};
     const float maxFreqs [numBands] = {500.0f, 2000.0f, 20000.0f};
@@ -36,13 +37,17 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
     const float minGain = -20.0f, defaultGain = 0.0f, maxGain = 20.0f;
     const float gainSkew = 1.0f;
     
+    // Loop through bands to create the parameters
     for (int band = 0; band < numBands; ++band)
     {
+        // Make some strings to use in parameter names and IDs
         String bandName = "Band " + String (band + 1);
         String bandID = "band" + String (band);
         
+        // A lambda which will update the filter coefficients for this band.
         auto bandCallback = [this, band] () {updateFilterCoefficients (band);};
         
+        // Add the frequency parameter
         String frequencyBandName = bandName + " Frequency";
         String frequencyBandID = bandID + "frequency";
         addParameter (frequencyParams [band] = 
@@ -54,6 +59,7 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
                                                  frequencySkew,
                                                  bandCallback));
         
+        // Add the Q parameter
         String qBandName = bandName + " Q Factor";
         String qBandID = bandID + "q";
         addParameter (qParams [band] = 
@@ -65,6 +71,7 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
                                                  qSkew,
                                                  bandCallback));
                                                  
+        // Add the gain parameter
         String gainBandName = bandName + " Gain";
         String gainBandID = bandID + "gain";
         addParameter (gainParams [band] = 
@@ -138,19 +145,24 @@ void PimpinEqAudioProcessor::changeProgramName (int index, const String& newName
 //==============================================================================
 void PimpinEqAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    // save the sample rate
     fs = sampleRate;
     
     int numChannels = getTotalNumInputChannels();
     
+    // loop through bands to add filters
     for (int band = 0; band < numBands; ++band)
     {
+        // clear any filters we aren't using anymore
         filters [band].clear();
         
+        // add a filter for each channel of audio
         for (int channel = 0; channel < numChannels; ++channel)
         {
             filters [band].add (new IIRFilter);
         }
         
+        // initialise this band's filter coefficients
         updateFilterCoefficients (band);
     }
 }
@@ -189,10 +201,12 @@ void PimpinEqAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer
     const int totalNumOutputChannels = getTotalNumOutputChannels();
     const int numSamples = buffer.getNumSamples();
     
+    // Loop through and apply the filters
     for (int channel = 0; channel < totalNumInputChannels; ++ channel)
     {
         float *channelData = buffer.getWritePointer (channel);
         
+        // Magical range based for loops
         for (auto &band : filters)
         {
             band [channel]->processSamples (channelData, numSamples);
@@ -231,12 +245,14 @@ void PimpinEqAudioProcessor::setStateInformation (const void* data, int sizeInBy
 
 void PimpinEqAudioProcessor::updateFilterCoefficients (int band)
 {
+    // Generate some filter coefficients from the parameter values
     IIRCoefficients coeffs = 
         IIRCoefficients::makePeakFilter (fs,
                                          *frequencyParams [band],
                                          *qParams [band],
                                          Decibels::decibelsToGain <float> (*gainParams [band]));
 
+    // give the coefficients to the relevant filters
     for (auto filter : filters [band])
     {
         filter->setCoefficients (coeffs);

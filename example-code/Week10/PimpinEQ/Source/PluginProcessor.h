@@ -17,6 +17,8 @@
 /**
 */
 class PimpinEqAudioProcessor  : public AudioProcessor,
+                                // we want to be able to listen to the parameter manager
+                                // object
                                 public AudioProcessorValueTreeState::Listener
 {
 public:
@@ -59,15 +61,25 @@ public:
     void parameterChanged (const String &parameterID, float newValue) override;
 
 private:
+    // somewhere to store the sample rate
     double fs;
     
+    // define the number of bands
     static const int numBands = 3;
+
+    // An array of OwnedArrays to hold the filters in.
+    // We need numBands filters for each channel of audio.
     OwnedArray <IIRFilter> filters [numBands];
+
+    // Our parameters are managed by this object.
     AudioProcessorValueTreeState pluginState;
+
+    // Somewhere to store the parameter IDs we use.
     String frequencyParamIDs [numBands];
     String qParamIDs [numBands];
     String gainParamIDs [numBands];
     
+    // A function to call when parameters are updated.
     void updateFilterCoefficients (int band);
 
     //==============================================================================
