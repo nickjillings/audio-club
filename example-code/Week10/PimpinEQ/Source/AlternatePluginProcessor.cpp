@@ -10,7 +10,6 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include <sstream>
 
 //==============================================================================
 PimpinEqAudioProcessor::PimpinEqAudioProcessor()
@@ -24,8 +23,7 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
                      #endif
                        ),
 #endif
-      fs (44100.0),
-      pluginState (*this, nullptr)
+      fs (44100.0)
 {
     const float minFreqs [numBands] = {20.0f, 200.0f, 500.0f};
     const float defaultFreqs [numBands] = {100.0f, 500.0f, 2000.0f};
@@ -34,57 +32,50 @@ PimpinEqAudioProcessor::PimpinEqAudioProcessor()
     
     const float minQ = 0.2f, defaultQ = 0.7f, maxQ = 5.0f;
     const float qSkew = 0.5f;
-    NormalisableRange <float> qRange (minQ, maxQ, 0.0f, qSkew);   
     
     const float minGain = -20.0f, defaultGain = 0.0f, maxGain = 20.0f;
     const float gainSkew = 1.0f;
-    NormalisableRange <float> gainRange (minGain, maxGain, 0.0f, gainSkew);
     
     for (int band = 0; band < numBands; ++band)
     {
         String bandName = "Band " + String (band + 1);
         String bandID = "band" + String (band);
         
-        NormalisableRange <float> frequencyBandRange (minFreqs [band],
-                                                      maxFreqs [band],
-                                                      0.0f,
-                                                      frequencySkew);
+        auto bandCallback = [this, band] () {updateFilterCoefficients (band);};
+        
         String frequencyBandName = bandName + " Frequency";
         String frequencyBandID = bandID + "frequency";
-        frequencyParamIDs [band] = frequencyBandID;
-        pluginState.createAndAddParameter (frequencyBandID,
-                                           frequencyBandName,
-                                           "",
-                                           frequencyBandRange,
-                                           defaultFreqs [band],
-                                           nullptr,
-                                           nullptr);
-        pluginState.addParameterListener (frequencyBandID, this);
+        addParameter (frequencyParams [band] = 
+                      new ParameterWithCallback (frequencyBandID,
+                                                 frequencyBandName,
+                                                 minFreqs [band],
+                                                 maxFreqs [band],
+                                                 defaultFreqs [band],
+                                                 frequencySkew,
+                                                 bandCallback));
         
         String qBandName = bandName + " Q Factor";
         String qBandID = bandID + "q";
-        qParamIDs [band] = qBandID;
-        pluginState.createAndAddParameter (qBandID,
-                                           qBandName,
-                                           "",
-                                           qRange,
-                                           defaultQ,
-                                           nullptr,
-                                           nullptr);
-        pluginState.addParameterListener (qBandID, this);
+        addParameter (qParams [band] = 
+                      new ParameterWithCallback (qBandID,
+                                                 qBandName,
+                                                 minQ,
+                                                 maxQ,
+                                                 defaultQ,
+                                                 qSkew,
+                                                 bandCallback));
                                                  
         String gainBandName = bandName + " Gain";
         String gainBandID = bandID + "gain";
-        gainParamIDs [band] = gainBandID;
-        pluginState.createAndAddParameter (gainBandID,
-                                           gainBandName,
-                                           "",
-                                           gainRange,
-                                           defaultGain,
-                                           nullptr,
-                                           nullptr);
-        pluginState.addParameterListener (gainBandID, this);
-    }   
+        addParameter (gainParams [band] = 
+                      new ParameterWithCallback (gainBandID,
+                                                 gainBandName,
+                                                 minGain,
+                                                 maxGain,
+                                                 defaultGain,
+                                                 gainSkew,
+                                                 bandCallback));                                                  
+    }
 }
 
 PimpinEqAudioProcessor::~PimpinEqAudioProcessor()
@@ -238,27 +229,13 @@ void PimpinEqAudioProcessor::setStateInformation (const void* data, int sizeInBy
 {
 }
 
-void PimpinEqAudioProcessor::parameterChanged (const String &parameterID, float /*newValue*/)
-{
-    int band = 0;
-    std::stringstream ss;
-    
-    ss << parameterID.substring (4);
-    ss >> band;
-    
-    updateFilterCoefficients (band);
-    
-}
-
 void PimpinEqAudioProcessor::updateFilterCoefficients (int band)
 {
-    const float *freq = pluginState.getRawParameterValue (frequencyParamIDs [band]);
-    const float *q = pluginState.getRawParameterValue (qParamIDs [band]);
-    const float *gain = pluginState.getRawParameterValue (gainParamIDs [band]);
-
     IIRCoefficients coeffs = 
-        IIRCoefficients::makePeakFilter (fs, *freq, *q,
-                                         Decibels::decibelsToGain (*gain));
+        IIRCoefficients::makePeakFilter (fs,
+                                         *frequencyParams [band],
+                                         *qParams [band],
+                                         Decibels::decibelsToGain <float> (*gainParams [band]));
 
     for (auto filter : filters [band])
     {

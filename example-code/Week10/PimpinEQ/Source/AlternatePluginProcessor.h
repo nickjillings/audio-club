@@ -12,12 +12,12 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "../../../Useful_Bits/ParameterWithCallback.h"
 
 //==============================================================================
 /**
 */
-class PimpinEqAudioProcessor  : public AudioProcessor,
-                                public AudioProcessorValueTreeState::Listener
+class PimpinEqAudioProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
@@ -55,18 +55,15 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    
-    void parameterChanged (const String &parameterID, float newValue) override;
 
 private:
     double fs;
     
     static const int numBands = 3;
     OwnedArray <IIRFilter> filters [numBands];
-    AudioProcessorValueTreeState pluginState;
-    String frequencyParamIDs [numBands];
-    String qParamIDs [numBands];
-    String gainParamIDs [numBands];
+    ParameterWithCallback *frequencyParams [numBands];
+    ParameterWithCallback *qParams [numBands];
+    ParameterWithCallback *gainParams [numBands];
     
     void updateFilterCoefficients (int band);
 
